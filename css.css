@@ -1,0 +1,62 @@
+*{
+    box-sizing: border-box;
+    margin: 0px;
+}
+body{
+    background-color: #555;
+}
+
+.RightNextToEachOther{
+	margin-left:6px;
+	margin-right:6px;
+}
+
+
+.flexContainerHorizontal{
+    display:flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.flexContainerVertical{
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.flexItem{
+
+}
+
+.navItem{
+    transition: all 1s;
+    margin-left:32px;
+    display: block;
+    cursor: pointer;
+    background-color:#777;
+    width:33%;
+}
+.navItem:hover{
+    background-color:white;
+    text-decoration: underline;
+}
+
+.center{
+    text-align:center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.left{
+    float:left;
+}
+a{
+    transition: all 1s;
+    text-decoration: none;
+    color:black;
+}
+a:hover{
+  color:orange;
+}
