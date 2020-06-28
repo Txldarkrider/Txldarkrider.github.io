@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Your Own Website</title>
+    <style>
+        input{
+            border:1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <script src="main.js"></script>
+    <div id="tempParent">
+
+    </div>
+    <form id="form" onsubmit="
+        CreateElement(GetElement('type').value,'tempParent',GetElement('text').value,GetElement('style').value); 
+        
+        GetElement('type').value = '';
+        
+        GetElement('text').value = ''; 
+
+        GetElement('style').value = ''; 
+        return false;
+    ">
+        <div><label>Type Of Element</label><input id="type" type="text" required></div><br>
+        <div><label>Inside Text</label><input id="text" type="text"></div><br>
+        <div><label>Styling</label><input id="style" type="text"></div><br>
+        <button>Push To Create Element</button>
+    </form>
+</body>
+</html>
