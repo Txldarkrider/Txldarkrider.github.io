@@ -49,29 +49,23 @@ class Player{
 		this.defaultspd = 5;
 		this.dodge = false;
 		this.damage = 1;
+		this.keys = [];
 	}
-	getKeyDown(evt){
-		if(evt.key === "w"){
+	CheckKeys(){
+		if(this.keys["w"]){
 			this.spd.y = -this.maxSpd;
 		}
-		if(evt.key === "s"){
+		else if(this.keys["s"]){
 			this.spd.y = this.maxSpd;
+		}else{
+			this.spd.y = 0;
 		}
-		if(evt.key === "a"){
+		if(this.keys["a"]){
 			this.spd.x = -this.maxSpd;
 		}
-		if(evt.key === "d"){
+		else if(this.keys["d"]){
 			this.spd.x = this.maxSpd;
-		}
-	}
-	getKeyUp(evt){
-		if(evt.key === "w"){
-			this.spd.y = 0;
-		}
-		if(evt.key === "s"){
-			this.spd.y = 0;
-		}
-		if(evt.key === "a" || evt.key === "d"){
+		}else{
 			this.spd.x = 0;
 		}
 	}
@@ -109,7 +103,7 @@ class Player{
 		}
 	}
 	shootProjectile(){
-		this.bullets.push(new Projectile(this.x,this.y,16,16,"black","Regular",this.aimangle));
+		this.bullets.push(new Projectile(this.x,this.y,16,16,`black`,"Regular",this.aimangle));
 	}
 	collideWithEdgesOfArena(a){
 		if(this.x + this.w >= a.width){
@@ -126,6 +120,7 @@ class Player{
 		}
 	}
 	updatePos(){
+		this.CheckKeys();
 		if(this.dodge === true){
 			this.spdboost = 20;
 			this.dodge = false;
@@ -162,11 +157,6 @@ class Player{
 	}
 }
 
-class Camera{
-	constructor(){
-		
-	}
-}
 
 class Enemy{
 	constructor(x,y,w,h,c,t,target){

@@ -5,8 +5,8 @@ canvas.style.right = 0;
 canvas.style.top = 0;
 canvas.style.bottom = 0;
 canvas.style.backgroundColor = "#555";
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width = window.innerWidth/3;
+canvas.height = window.innerHeight/1.5;
 let ctx = canvas.getContext("2d");
 
 //Test if two rectangles overlap and then returns true(they overlap) or false(they dont overlap)
@@ -131,7 +131,7 @@ class Ball{
 let balls = []
 function setup(){
 	//pushes a bunch of balls into the balls array with a bunch of random values
-	for(let i=0; i<32; i++){
+	for(let i=0; i<10; i++){
 		//balls.push(new Ball(new Ellipse(96,(i*256)+128,32,`rgb(${Math.getRandomInt(100,255)},${Math.getRandomInt(100,255)},${Math.getRandomInt(100,255)})`),5));
 		balls.push(new Ball(new Ellipse(Math.getRandomInt(96,canvas.width-96),Math.getRandomInt(96,canvas.height-96),Math.getRandomInt(32,64),`rgb(${Math.getRandomInt(100,255)},${Math.getRandomInt(100,255)},${Math.getRandomInt(100,255)})`),5));
 	}

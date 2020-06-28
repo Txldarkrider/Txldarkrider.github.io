@@ -80,18 +80,16 @@ function update(){
 			}
 		}
 	}
+	document.onmousemove = function(evt){
+		p.mouseMove(evt);
+	}
 }
 
 document.addEventListener("keydown",(evt)=>{
-	p.getKeyDown(evt);
+	p.keys[evt.key] = true;
 });
 document.addEventListener("keyup",(evt)=>{
-	p.getKeyUp(evt);
-});
-document.addEventListener("mousemove",(evt)=>{
-	// let mx = evt.clientX - document.getElementById('canvas').getBoundingClientRect().left;
-	
-	p.mouseMove(evt);
+	p.keys[evt.key] = false;
 });
 document.addEventListener("mousedown",(evt)=>{
 	p.mouseDown(evt);
@@ -99,36 +97,5 @@ document.addEventListener("mousedown",(evt)=>{
 document.addEventListener("mouseup",(evt)=>{
 	p.mouseUp(evt);
 });
-
-// You could also use an array
-//Mutiple keypresses dectected i dont think i need it yet
-// onkeydown = onkeyup = function(e){
-//     e = e || event; // to deal with IE
-//     p.keys[e.keyCode] = e.type == 'keydown';
-   
-//   	if(p.keys[16]){
-//   		p.maxSpd = p.defaultspd * 2;
-//   	}else{
-//   		p.maxSpd = p.defaultspd;
-//   	}
-  	
-//   	if(p.keys[65]){
-// 			p.spd.x = -p.maxSpd;
-// 		}else if(p.keys[68]){
-// 			p.spd.x = p.maxSpd;
-// 		}
-// 		else if(p.keys[87]){
-// 			// alert();
-// 			p.spd.y = -p.maxSpd;
-// 		}else if(p.keys[83]){
-// 			p.spd.y = p.maxSpd;
-// 		}else {
-// 			p.spd.y = 0;
-// 			p.spd.x = 0;
-// 			p.keys = {};
-// 		}
-		
-		
-// };
 
 start();
