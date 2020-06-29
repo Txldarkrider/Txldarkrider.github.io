@@ -12,7 +12,7 @@ canvas.style.margin = "auto";
 canvas.width = window.innerWidth/2;
 canvas.height = window.innerHeight;
 
-if(canvas.width < 720){
+if(window.screen.availWidth < 720){
     playerMoveType = "Mobile";
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
