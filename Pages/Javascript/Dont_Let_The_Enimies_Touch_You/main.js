@@ -22,7 +22,7 @@ let ctx = canvas.getContext("2d");
 
 let enemies = [];
 
-let player = new Player(new Rect(0,0,32,32,"coral"));
+let player = new Player(new Rect(canvas.width/2-16,canvas.height/2-16,32,32,"coral"));
 
 function start(){
 
