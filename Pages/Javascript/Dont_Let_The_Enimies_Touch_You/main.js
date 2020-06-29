@@ -47,8 +47,8 @@ document.onmousemove = (e)=>{
 }
 document.ontouchmove = (e)=>{
 
-    player.mouse.rect.x = e.touches[e.touches.length-1].clientX - canvas.getBoundingClientRect().left - player.mouse.rect.w/2;
-    player.mouse.rect.y = e.touches[e.touches.length-1].clientY - canvas.getBoundingClientRect().top - player.mouse.rect.h/2;
+    player.mouse.rect.x = e.touches[0].clientX - canvas.getBoundingClientRect().left - player.mouse.rect.w/2;
+    player.mouse.rect.y = e.touches[0].clientY - canvas.getBoundingClientRect().top - player.mouse.rect.h/2;
 }
 document.onmousedown = (e)=>{
     player.mouse.keys[e.which] = true;
