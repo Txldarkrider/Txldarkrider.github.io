@@ -7,17 +7,21 @@ canvas.style.bottom = 0;
 
 canvas.style.backgroundColor = "#555";
 
-console.log(window);
+canvas.style.position = "absolute";
+canvas.style.margin = "auto";
+canvas.width = window.innerWidth/2;
+canvas.height = window.innerHeight;
 
-if(window.screen.availWidth >= 720){
-    canvas.style.position = "absolute";
-    canvas.style.margin = "auto";
+if(canvas.width < 720){
+    playerMoveType = "Mobile";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}else{
+    playerMoveType = "Computer";
     canvas.width = 720;
     canvas.height = 720;
-}else{
-    canvas.width = window.screen.availWidth;
-    canvas.height = window.screen.availHeight/2;
 }
+
 let ctx = canvas.getContext("2d");
 
 let enemies = [];
@@ -46,9 +50,10 @@ document.onmousemove = (e)=>{
     player.mouse.rect.y = e.clientY - canvas.getBoundingClientRect().top - player.mouse.rect.h/2;
 }
 document.ontouchmove = (e)=>{
-
-    player.mouse.rect.x = e.touches[0].clientX - canvas.getBoundingClientRect().left - player.mouse.rect.w/2;
-    player.mouse.rect.y = e.touches[0].clientY - canvas.getBoundingClientRect().top - player.mouse.rect.h/2;
+    player.rect.x = e.touches[0].clientX - canvas.getBoundingClientRect().left - player.mouse.rect.w/2;
+    player.rect.y = e.touches[0].clientY - canvas.getBoundingClientRect().top - player.mouse.rect.h/2;
+    player.mouse.rect.x = e.touches[1].clientX - canvas.getBoundingClientRect().left - player.mouse.rect.w/2;
+    player.mouse.rect.y = e.touches[1].clientY - canvas.getBoundingClientRect().top - player.mouse.rect.h/2;
 }
 document.onmousedown = (e)=>{
     player.mouse.keys[e.which] = true;
