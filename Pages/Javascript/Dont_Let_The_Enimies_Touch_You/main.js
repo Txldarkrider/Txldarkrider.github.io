@@ -7,14 +7,16 @@ canvas.style.bottom = 0;
 
 canvas.style.backgroundColor = "#555";
 
-if(window.innerWidth >= 720){
+console.log(window);
+
+if(window.screen.availWidth >= 720){
     canvas.style.position = "absolute";
     canvas.style.margin = "auto";
     canvas.width = 720;
     canvas.height = 720;
 }else{
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight/2;
+    canvas.width = window.screen.availWidth;
+    canvas.height = window.screen.availHeight/2;
 }
 let ctx = canvas.getContext("2d");
 
