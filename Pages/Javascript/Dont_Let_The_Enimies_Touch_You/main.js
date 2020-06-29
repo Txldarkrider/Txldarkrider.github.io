@@ -8,8 +8,8 @@ canvas.style.bottom = 0;
 
 canvas.style.backgroundColor = "#555";
 
-canvas.width = 480;
-canvas.height = 480;
+canvas.width = 720;
+canvas.height = 720;
 
 let ctx = canvas.getContext("2d");
 
@@ -38,11 +38,22 @@ document.onmousemove = (e)=>{
     player.mouse.rect.x = e.clientX - canvas.getBoundingClientRect().left - player.mouse.rect.w/2;
     player.mouse.rect.y = e.clientY - canvas.getBoundingClientRect().top - player.mouse.rect.h/2;
 }
+document.ontouchmove = (e)=>{
+
+    player.mouse.rect.x = e.touches[0].clientX - canvas.getBoundingClientRect().left - player.mouse.rect.w/2;
+    player.mouse.rect.y = e.touches[0].clientY - canvas.getBoundingClientRect().top - player.mouse.rect.h/2;
+}
 document.onmousedown = (e)=>{
     player.mouse.keys[e.which] = true;
 }
+document.ontouchstart = (e) =>{
+    player.mouse.keys[1] = true;
+}
 document.onmouseup = (e)=>{
     player.mouse.keys[e.which] = false;
+}
+document.ontouchend = (e) =>{
+    player.mouse.keys[1] = false;
 }
 start();
 update();
