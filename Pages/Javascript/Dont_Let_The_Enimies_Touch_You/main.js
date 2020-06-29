@@ -1,6 +1,5 @@
 let canvas = document.getElementById("game");
-canvas.style.position = "absolute";
-canvas.style.margin = "auto";
+
 canvas.style.left = 0;
 canvas.style.right = 0;
 canvas.style.top = 0;
@@ -8,9 +7,15 @@ canvas.style.bottom = 0;
 
 canvas.style.backgroundColor = "#555";
 
-canvas.width = 720;
-canvas.height = 720;
-
+if(window.innerWidth >= 720){
+    canvas.style.position = "absolute";
+    canvas.style.margin = "auto";
+    canvas.width = 720;
+    canvas.height = 720;
+}else{
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight/2;
+}
 let ctx = canvas.getContext("2d");
 
 let enemies = [];
