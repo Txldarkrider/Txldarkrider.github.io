@@ -74,14 +74,13 @@ function update(){
             
             if(TestCollision(enemy.bullets[key].rect,player.rect)){
                 enemy.bullets[key].canDie = true;
-                // setup();
+                setup();
             }
             if(enemy.bullets[key].canDie){
                 delete enemy.bullets[key];
             }
         }
-        // enemy.setAimAngle(player.rect.pos);
-        enemy.update(ctx,player.spdMod,player.rect.pos);
+        enemy.update(ctx,player.spdMod,player.rect.pos,player.isSlowmo);
     });
     spawnTimer += 1;
 }

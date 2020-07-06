@@ -118,13 +118,16 @@ class Player{
         this.maxSpd = maxSpd;
 
         this.spdMod = new Vector(1);
+        this.isSlowmo = false;
         this.keys = [];
     }
     checkKeys(){
         if(this.keys[" "]){
             this.spdMod = new Vector(0.25);
+            this.isSlowmo = true;
         }else{
             this.spdMod = new Vector(1);
+            this.isSlowmo = false;
         }
  
         if(this.keys["w"] || this.keys["ArrowUp"]){
@@ -182,7 +185,7 @@ class Enemy{
     draw(ctx){
         this.rect.draw(ctx);
     }
-    update(ctx,spdModifier = new Vector(1),playerPos){
+    update(ctx,spdModifier = new Vector(1),playerPos,isSlowmo){
         let tempFireDelayTimerIncrement = this.fireDelayTimerIncrement * spdModifier.x;
         let tempFireDelay = this.fireDelay * spdModifier.x;
         let tempFireDelayTimer = this.fireDelayTimer * spdModifier.x;
@@ -202,12 +205,17 @@ class Enemy{
                 this.shoot(playerPos);   
                 this.fireDelayTimer = 1;
             }else{
-                this.shoot(playerPos,true,[
-                    new Vector2(0,0),
-                    new Vector2(0,canvas.height),
-                    new Vector2(canvas.width,0),
-                    new Vector2(canvas.width,canvas.height),
-                ]);
+                console.log("Slow Mo Shots")
+                if(isSlowmo){
+                    this.shoot(playerPos,true,[
+                        new Vector2(0,0),
+                        new Vector2(0,canvas.height),
+                        new Vector2(canvas.width,0),
+                        new Vector2(canvas.width,canvas.height),
+                    ]);
+                }else{
+                    this.shoot(playerPos);
+                }
                 this.fireDelayTimer = 1;
             }
         }
