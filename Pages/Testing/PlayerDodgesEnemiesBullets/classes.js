@@ -16,6 +16,9 @@ class Vector{
     subtract(vector){
         this.x -= vector.x;
     }
+    multiply(vector){
+        this.x *= vector.x;
+    }
 }
 class Vector2{
     constructor(x=0,y=0){
@@ -29,6 +32,10 @@ class Vector2{
     subtract(vector2){
         this.x -= vector2.x;
         this.y -= vector2.y;
+    }
+    multiply(vector2){
+        this.x *= vector2.x; 
+        this.y *= vector2.y;
     }
 }
 class Color{
@@ -77,21 +84,26 @@ class Mouse{
     }
 }
 class Projectile{
-    constructor(rect = new Rect(),angle = new Vector()){
+    constructor(rect = new Rect(),angle = new Vector(),maxSpd = 1){
         this.rect = rect;
-        this.spd = new Vector2(Math.cos(angle.x/180*Math.PI)*5,Math.sin(angle.x/180*Math.PI)*5);
+        this.angle = angle;
+        this.spd = new Vector2(Math.cos(angle.x/180*Math.PI)*maxSpd,Math.sin(angle.x/180*Math.PI)*maxSpd);
         this.DeathTimer = 0;
         this.DeathTimeLimit = 1000;
         this.canDie = false;
     }
-    updatepos(){
+    updateSpd(spd){
+        this.spd = new Vector2(Math.cos(this.angle.x/180*Math.PI)*spd,Math.sin(this.angle.x/180*Math.PI)*spd);
+    }
+    updatepos(spd){
+        this.updateSpd(spd)
         this.rect.pos.add(this.spd);
     }
     draw(ctx){
         this.rect.draw(ctx);
     }
-    update(ctx){
-        this.updatepos();
+    update(ctx,spd){
+        this.updatepos(spd);
         this.draw(ctx);
         this.DeathTimer += 1;
         if(this.DeathTimer % this.DeathTimeLimit == 0){
@@ -105,9 +117,16 @@ class Player{
         this.spd = new Vector2();
         this.maxSpd = maxSpd;
 
+        this.spdMod = new Vector(1);
         this.keys = [];
     }
     checkKeys(){
+        if(this.keys[" "]){
+            this.spdMod = new Vector(0.1);
+        }else{
+            this.spdMod = new Vector(1);
+        }
+ 
         if(this.keys["w"] || this.keys["ArrowUp"]){
             this.spd.y = -this.maxSpd.y;
         }else if(this.keys["s"] || this.keys["ArrowDown"]){
@@ -140,25 +159,41 @@ class Enemy{
         this.rect = rect;
         this.bullets = [];
         this.fireDelayTimer = Math.getRandomInt(-20,20);
-        this.fireDelay = Math.getRandomInt(20,100);
+        this.fireDelayTimerIncrement = 1;
+        this.fireDelay = 20
+        // Math.getRandomInt(20,100);
+        this.bulletSpd = Math.getRandomInt(1,6);
+        this.canShoot = true;
     }
     setAimAngle(pos){
-        this.aimAngle = new Vector(Math.atan2((pos.y-this.rect.pos.y)+Math.getRandomInt(-32,32),(pos.x-this.rect.pos.x)+Math.getRandomInt(-32,32))*180/Math.PI);
+        this.aimAngle = new Vector(Math.atan2((pos.y-16-this.rect.pos.y)+Math.getRandomInt(-32,32),(pos.x-16-this.rect.pos.x)+Math.getRandomInt(-32,32))*180/Math.PI);
     }
     shoot(){
-        this.bullets.push(new Projectile(new Rect(new Vector2(this.rect.pos.x,this.rect.pos.y),new Vector2(8,8)),this.aimAngle))
+        this.bullets.push(new Projectile(new Rect(new Vector2(this.rect.pos.x+16,this.rect.pos.y+16),new Vector2(8,8)),this.aimAngle,this.bulletSpd))
     }
     draw(ctx){
         this.rect.draw(ctx);
     }
-    update(ctx){
+    update(ctx,spdModifier = new Vector(1)){
+        let tempFireDelayTimerIncrement = this.fireDelayTimerIncrement * spdModifier.x;
+        let tempFireDelay = this.fireDelay * spdModifier.x;
+        let tempFireDelayTimer = this.fireDelayTimer * spdModifier.x;
+        
+        // ctx.fillText(`CanShoot:${Math.trunc(tempFireDelayTimer)  % tempFireDelay === 0}`,16,32)
+        // ctx.fillText(`tempFireDelayTimer:${Math.trunc(tempFireDelayTimer)}`,16,64)
+        
         this.draw(ctx);
         this.bullets.forEach(bullet=>{
-            bullet.update(ctx);
+            let tempSpd = this.bulletSpd * spdModifier.x;
+            bullet.update(ctx,tempSpd);
         })
-        if(this.fireDelayTimer % this.fireDelay === 0){
-            this.shoot(this.aimAngle);
+        if(Math.ceil(tempFireDelayTimer) % tempFireDelay === 0){
+            this.canShoot = true;
         }
-        this.fireDelayTimer += 1;
+        if(this.canShoot){
+            this.shoot();
+            this.canShoot = false;
+        }
+        this.fireDelayTimer += tempFireDelayTimerIncrement;
     }
 }

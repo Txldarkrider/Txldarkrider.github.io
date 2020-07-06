@@ -21,6 +21,13 @@ let spawnTimerSubtraction;
 let lastEnemyPosIndex;
 let enemyPositions;
 
+function TestCollision(rect1,rect2){
+    return rect1.pos.x < rect2.pos.x + rect2.size.x && 
+    rect1.pos.x + rect1.size.x > rect2.pos.x && 
+    rect1.pos.y < rect2.pos.y + rect2.size.y && 
+    rect1.pos.y + rect1.size.y > rect2.pos.y;
+}
+
 function addEnemy(){
     if(lastEnemyPosIndex+1 <= enemyPositions.length-1){
         if(spawnTimer % spawnTimerLimit === 0){
@@ -49,7 +56,6 @@ function setup(){
         new Enemy(new Rect(new Vector2(enemyPositions[lastEnemyPosIndex].x,enemyPositions[lastEnemyPosIndex].y),new Vector2(32,32),new Color("green"))),
     ];
     player = new Player(new Rect(new Vector2(canvas.width/2-16,canvas.height/2-16),new Vector2(32,32),new Color("coral")),new Vector2(5,5));
-    // t = new Projectile(new Rect(new Vector2(0,0),new Vector2(8,8)),new Vector(90));
 }
 function update(){
     requestAnimationFrame(update);
@@ -60,12 +66,17 @@ function update(){
     player.update(ctx);
     enemies.forEach(enemy => {
         for(let key in enemy.bullets){
+
+            if(TestCollision(enemy.bullets[key].rect,player.rect)){
+                enemy.bullets[key].canDie = true;
+                setup();
+            }
             if(enemy.bullets[key].canDie){
                 delete enemy.bullets[key];
             }
         }
         enemy.setAimAngle(player.rect.pos);
-        enemy.update(ctx)
+        enemy.update(ctx,player.spdMod);
     });
     spawnTimer += 1;
 }
