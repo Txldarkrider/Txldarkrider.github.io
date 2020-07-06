@@ -32,7 +32,12 @@ function addEnemy(){
     if(lastEnemyPosIndex+1 <= enemyPositions.length-1){
         if(spawnTimer % spawnTimerLimit === 0){
             lastEnemyPosIndex +=1;
-            enemies.push(new Enemy(new Rect(new Vector2(enemyPositions[lastEnemyPosIndex].x,enemyPositions[lastEnemyPosIndex].y),new Vector2(32,32),new Color("green"))))
+            enemies.push(new Enemy(new Rect(new Vector2(enemyPositions[lastEnemyPosIndex].x,
+                        enemyPositions[lastEnemyPosIndex].y),
+                        new Vector2(32,32),new Color("green"))));
+            spawnTimerLimit += Math.trunc(spawnTimerLimit/3);
+            spawnTimer = 1;
+            console.log(spawnTimerLimit);
         }   
     } 
 }
@@ -69,7 +74,7 @@ function update(){
             
             if(TestCollision(enemy.bullets[key].rect,player.rect)){
                 enemy.bullets[key].canDie = true;
-                setup();
+                // setup();
             }
             if(enemy.bullets[key].canDie){
                 delete enemy.bullets[key];
