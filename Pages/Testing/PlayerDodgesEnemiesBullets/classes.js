@@ -122,7 +122,7 @@ class Player{
     }
     checkKeys(){
         if(this.keys[" "]){
-            this.spdMod = new Vector(0.1);
+            this.spdMod = new Vector(0.25);
         }else{
             this.spdMod = new Vector(1);
         }
@@ -161,38 +161,55 @@ class Enemy{
         this.fireDelayTimer = Math.getRandomInt(-20,20);
         this.fireDelayTimerIncrement = 1;
         this.fireDelay = 20
-        // Math.getRandomInt(20,100);
-        this.bulletSpd = Math.getRandomInt(1,6);
-        this.canShoot = true;
+        this.bulletSpd = Math.getRandomInt(2,5);
     }
     setAimAngle(pos){
         this.aimAngle = new Vector(Math.atan2((pos.y-16-this.rect.pos.y)+Math.getRandomInt(-32,32),(pos.x-16-this.rect.pos.x)+Math.getRandomInt(-32,32))*180/Math.PI);
+        
     }
-    shoot(){
-        this.bullets.push(new Projectile(new Rect(new Vector2(this.rect.pos.x+16,this.rect.pos.y+16),new Vector2(8,8)),this.aimAngle,this.bulletSpd))
+    shoot(pos,angleoveride,positions){
+        if(!angleoveride){
+            this.setAimAngle(pos);
+            this.bullets.push(new Projectile(new Rect(new Vector2(this.rect.pos.x+16,this.rect.pos.y+16),new Vector2(8,8)),this.aimAngle,this.bulletSpd))
+        }else{
+            for(let key in positions){
+                this.setAimAngle(positions[key]);
+                this.bullets.push(new Projectile(new Rect(new Vector2(this.rect.pos.x+16,this.rect.pos.y+16),new Vector2(8,8)),this.aimAngle,this.bulletSpd))
+            }
+        }
+        
     }
     draw(ctx){
         this.rect.draw(ctx);
     }
-    update(ctx,spdModifier = new Vector(1)){
+    update(ctx,spdModifier = new Vector(1),playerPos){
         let tempFireDelayTimerIncrement = this.fireDelayTimerIncrement * spdModifier.x;
         let tempFireDelay = this.fireDelay * spdModifier.x;
         let tempFireDelayTimer = this.fireDelayTimer * spdModifier.x;
-        
-        // ctx.fillText(`CanShoot:${Math.trunc(tempFireDelayTimer)  % tempFireDelay === 0}`,16,32)
-        // ctx.fillText(`tempFireDelayTimer:${Math.trunc(tempFireDelayTimer)}`,16,64)
         
         this.draw(ctx);
         this.bullets.forEach(bullet=>{
             let tempSpd = this.bulletSpd * spdModifier.x;
             bullet.update(ctx,tempSpd);
         })
+        //Super fast firing during slowmo
+        // if(Math.ceil(tempFireDelayTimer) % tempFireDelay === 0){
+        //     this.shoot(); 
+        // }
+        //Regular Firing during slowmo
         if(Math.ceil(tempFireDelayTimer) % tempFireDelay === 0){
-            this.canShoot = true;
-        }
-        if(this.canShoot){
-            this.shoot();
-            this.canShoot = false;
+            if(Math.getRandomFloat(1,10) >= 2.5){
+                this.shoot(playerPos);   
+                this.fireDelayTimer = 1;
+            }else{
+                this.shoot(playerPos,true,[
+                    new Vector2(0,0),
+                    new Vector2(0,canvas.height),
+                    new Vector2(canvas.width,0),
+                    new Vector2(canvas.width,canvas.height),
+                ]);
+                this.fireDelayTimer = 1;
+            }
         }
         this.fireDelayTimer += tempFireDelayTimerIncrement;
     }

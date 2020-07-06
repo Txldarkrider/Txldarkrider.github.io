@@ -66,17 +66,17 @@ function update(){
     player.update(ctx);
     enemies.forEach(enemy => {
         for(let key in enemy.bullets){
-
+            
             if(TestCollision(enemy.bullets[key].rect,player.rect)){
                 enemy.bullets[key].canDie = true;
-                setup();
+                // setup();
             }
             if(enemy.bullets[key].canDie){
                 delete enemy.bullets[key];
             }
         }
-        enemy.setAimAngle(player.rect.pos);
-        enemy.update(ctx,player.spdMod);
+        // enemy.setAimAngle(player.rect.pos);
+        enemy.update(ctx,player.spdMod,player.rect.pos);
     });
     spawnTimer += 1;
 }
