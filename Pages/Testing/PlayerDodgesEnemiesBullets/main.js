@@ -69,7 +69,7 @@ function update(){
             
             if(TestCollision(enemy.bullets[key].rect,player.rect)){
                 enemy.bullets[key].canDie = true;
-                // setup();
+                setup();
             }
             if(enemy.bullets[key].canDie){
                 delete enemy.bullets[key];
