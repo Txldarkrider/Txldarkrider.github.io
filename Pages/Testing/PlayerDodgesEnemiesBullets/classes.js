@@ -205,7 +205,7 @@ class Enemy{
                 this.shoot(playerPos);   
                 this.fireDelayTimer = 1;
             }else{
-                console.log("Slow Mo Shots")
+                //console.log("Slow Mo Shots")
                 if(isSlowmo){
                     this.shoot(playerPos,true,[
                         new Vector2(0,0),

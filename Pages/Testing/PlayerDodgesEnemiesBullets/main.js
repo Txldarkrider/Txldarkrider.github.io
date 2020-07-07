@@ -37,7 +37,7 @@ function addEnemy(){
                         new Vector2(32,32),new Color("green"))));
             spawnTimerLimit += Math.trunc(spawnTimerLimit/3);
             spawnTimer = 1;
-            console.log(spawnTimerLimit);
+            //console.log(spawnTimerLimit);
         }   
     } 
 }
