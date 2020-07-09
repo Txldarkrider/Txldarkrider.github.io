@@ -21,6 +21,8 @@ let spawnTimerSubtraction;
 let lastEnemyPosIndex;
 let enemyPositions;
 
+let score;
+
 function TestCollision(rect1,rect2){
     return rect1.pos.x < rect2.pos.x + rect2.size.x && 
     rect1.pos.x + rect1.size.x > rect2.pos.x && 
@@ -43,6 +45,12 @@ function addEnemy(){
 }
 
 function setup(){
+    score = new Score();
+    score.scoreText.pos = new Vector2(150,32);
+    score.scoreText.maxSize = new Vector(24);
+    score.Highscoretext.pos = new Vector2(450,32);
+    score.Highscoretext.maxSize = new Vector(24);
+    score.currentscore = 0;
     spawnTimer = 1;
     spawnTimerLimit = 500;
     lastEnemyPosIndex = 0;
@@ -74,6 +82,7 @@ function update(){
             
             if(TestCollision(enemy.bullets[key].rect,player.rect)){
                 enemy.bullets[key].canDie = true;
+                score.SetHighScore(score.currentscore);
                 setup();
             }
             if(enemy.bullets[key].canDie){
@@ -82,7 +91,14 @@ function update(){
         }
         enemy.update(ctx,player.spdMod,player.rect.pos,player.isSlowmo);
     });
+
+    score.scoreText.setText(`Score: ${score.currentscore}`);    
+    score.scoreText.draw(ctx); 
+    score.Highscoretext.setText(`Highscore: ${score.highscore}`);    
+    score.Highscoretext.draw(ctx);
+    
     spawnTimer += 1;
+    score.currentscore += 1;
 }
 
 document.addEventListener("keydown",(e)=>{

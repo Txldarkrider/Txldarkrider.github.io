@@ -111,6 +111,57 @@ class Projectile{
         }
     }
 }
+
+class Text{
+    constructor(text = new String(),pos = new Vector2(),maxSize = new Vector(32)){
+        this.text = text;
+        this.pos = pos;
+        this.maxSize = maxSize;
+    }
+    setText(newText = new String()){
+        this.text = newText;
+    }
+    draw(ctx){
+        ctx.save();
+            ctx.font = `${this.maxSize.x}px Arial`;
+            ctx.fillText(this.text,this.pos.x-(this.text.length/4*this.maxSize.x),this.pos.y);
+        ctx.restore();
+    }
+}
+
+class Score{
+    constructor(){
+        this.currentscore = 0;
+        this.highscore = this.getCookie("highscore");
+        this.scoreText = new Text()    
+        this.Highscoretext = new Text()    
+    }
+    SetHighScore(newScore){
+        if(newScore > this.highscore){
+            document.cookie = `highscore=${newScore};`;
+        }else{
+            document.cookie = `highscore=${this.highscore};`;
+            return false;
+        }
+    }
+    getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+}
+
+
 class Player{
     constructor(rect = new Rect(),maxSpd = new Vector2()){
         this.rect = rect;
@@ -121,15 +172,15 @@ class Player{
         this.isSlowmo = false;
         this.keys = [];
     }
-    checkKeys(){
-        if(this.keys[" "]){
-            this.spdMod = new Vector(0.25);
-            this.isSlowmo = true;
-        }else{
-            this.spdMod = new Vector(1);
-            this.isSlowmo = false;
+    wallCollisions(){
+        if(this.rect.pos.x >= canvas.width-this.rect.size.x || this.rect.pos.x <= 0){
+            this.rect.pos.x -= this.spd.x;
         }
- 
+        if(this.rect.pos.y >= canvas.height-this.rect.size.y || this.rect.pos.y <= 0){
+            this.rect.pos.y -= this.spd.y;
+        }
+    }
+    checkKeys(){
         if(this.keys["w"] || this.keys["ArrowUp"]){
             this.spd.y = -this.maxSpd.y;
         }else if(this.keys["s"] || this.keys["ArrowDown"]){
@@ -144,6 +195,13 @@ class Player{
         }else{
             this.spd.x = 0;
         }
+        if(this.keys[" "]){
+            this.spdMod = new Vector(0.25);
+            this.isSlowmo = true;
+        }else{
+            this.spdMod = new Vector(1);
+            this.isSlowmo = false;
+        }
     }
     draw(ctx){
         this.rect.draw(ctx);
@@ -154,6 +212,7 @@ class Player{
     update(ctx){
         this.checkKeys();
         this.updatePos();
+        this.wallCollisions();
         this.draw(ctx);
     }
 }
@@ -201,23 +260,19 @@ class Enemy{
         // }
         //Regular Firing during slowmo
         if(Math.ceil(tempFireDelayTimer) % tempFireDelay === 0){
-            if(Math.getRandomFloat(1,10) >= 2.5){
-                this.shoot(playerPos);   
-                this.fireDelayTimer = 1;
-            }else{
                 //console.log("Slow Mo Shots")
-                if(isSlowmo){
-                    this.shoot(playerPos,true,[
-                        new Vector2(0,0),
-                        new Vector2(0,canvas.height),
-                        new Vector2(canvas.width,0),
-                        new Vector2(canvas.width,canvas.height),
-                    ]);
-                }else{
-                    this.shoot(playerPos);
-                }
-                this.fireDelayTimer = 1;
+            if(isSlowmo){
+                this.shoot(playerPos,true,[
+                    new Vector2(0,0),
+                    new Vector2(0,canvas.height),
+                    new Vector2(canvas.width,0),
+                    new Vector2(canvas.width,canvas.height),
+                    new Vector2(playerPos.x,playerPos.y)
+                ]);
+            }else{
+                this.shoot(playerPos);
             }
+            this.fireDelayTimer = 1;
         }
         this.fireDelayTimer += tempFireDelayTimerIncrement;
     }
