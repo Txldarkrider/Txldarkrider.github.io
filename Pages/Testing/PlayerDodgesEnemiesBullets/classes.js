@@ -38,6 +38,13 @@ class Vector2{
         this.y *= vector2.y;
     }
 }
+class Vector3{
+    constructor(x=0,y=0,z=0){
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+}
 class Color{
     constructor(){
         if(arguments.length === 4){
@@ -50,14 +57,14 @@ class Color{
             this.r = arguments[0];
             this.g = arguments[1];
             this.b = arguments[2];
-            this.c = `rgb(${arguments[0]},${arguments[1]},${arguments[2]})`;
+            this.c = `rgba(${arguments[0]},${arguments[1]},${arguments[2]},1)`;
         }else if(arguments.length === 1){
             this.c = arguments[0];
         }else{
             this.r = 0;
             this.g = 0;
             this.b = 0;
-            this.c = `rgb(0,0,0)`;
+            this.c = `rgba(0,0,0,1)`;
 
         }
     }
@@ -78,6 +85,7 @@ class Rect{
 class Mouse{
     constructor(rect = new Rect()){
         this.rect = rect;
+        this.keys = [];
     }
     draw(ctx){
         this.rect.draw(ctx);
@@ -116,6 +124,7 @@ class Text{
     constructor(text = new String(),pos = new Vector2(),maxSize = new Vector(32)){
         this.text = text;
         this.pos = pos;
+        this.color = new Color();
         this.maxSize = maxSize;
     }
     setText(newText = new String()){
@@ -123,9 +132,27 @@ class Text{
     }
     draw(ctx){
         ctx.save();
-            ctx.font = `${this.maxSize.x}px Arial`;
+            ctx.fillStyle = this.color.c;
+            ctx.font = `${this.maxSize.x}px noto`;
             ctx.fillText(this.text,this.pos.x-(this.text.length/4*this.maxSize.x),this.pos.y);
         ctx.restore();
+    }
+}
+
+class Button{
+    constructor(text = new Text(), rect = new Rect()){
+        this.text = text;
+        this.rect = rect;
+    }
+    onmousein(){
+        this.rect.color = new Color("grey");
+    }
+    onmouseout(){
+        this.rect.color = new Color("darkgrey");
+    }
+    draw(ctx){
+        this.rect.draw(ctx);
+        this.text.draw(ctx);
     }
 }
 
@@ -160,7 +187,6 @@ class Score{
         return "";
       }
 }
-
 
 class Player{
     constructor(rect = new Rect(),maxSpd = new Vector2()){
@@ -216,6 +242,7 @@ class Player{
         this.draw(ctx);
     }
 }
+
 class Enemy{
     constructor(rect = new Rect()){
         this.rect = rect;
