@@ -3,7 +3,7 @@
     margin: 0px;
 }
 body{
-    background-color: #555;
+    background-color: #403F4C;
 }
 
 .RightNextToEachOther{
@@ -29,17 +29,23 @@ body{
 .flexItem{
 
 }
-
+.title{
+    color:#7993B9;
+}
+hr{
+    background-color:#5E5D6F;
+    border:0px;
+}
 .navItem{
     transition: all 1s;
     margin-left:32px;
     display: block;
     cursor: pointer;
-    background-color:#777;
+    background-color:#5E5D6F;
     width:33%;
 }
 .navItem:hover{
-    background-color:white;
+    /* background-color:white; */
     text-decoration: underline;
 }
 
@@ -55,8 +61,8 @@ body{
 a{
     transition: all 1s;
     text-decoration: none;
-    color:black;
+    color:#5472A0;
 }
 a:hover{
-  color:orange;
+    color:#D7DEEA;
 }
