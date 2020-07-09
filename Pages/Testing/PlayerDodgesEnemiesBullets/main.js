@@ -90,7 +90,7 @@ function setup(){
     mainMenuText.setText(`Highscore: ${score.highscore}`);
     mainMenuText.pos = new Vector2(137,96);
     titleText = new Text();
-    titleText.setText("Bullet Time");
+    titleText.setText("Evasion");
     titleText.pos = new Vector2(192,64);
     titleText.maxSize = new Vector(64);
     mainMenuButtons = [
