@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<style>
+			body{
+				margin:0px;
+			}
+		</style>
+	</head>
+	<body onload="document.getElementById('game').width = window.innerWidth; document.getElementById('game').height = window.innerHeight;">
+		<div>
+			<form action="" onsubmit="
+				let gameFile = document.getElementById('myFile').files[0]; 
+				
+				console.log(gameFile);
+				
+				let formData = new FormData();
+
+				formData.append('gameFile', gameFile);
+				fetch('/', {method: 'POST', body: formData});
+				
+				SetGame(gameFile); 
+				
+				return false;
+			">
+				<input type="file" id="myFile" name="filename">
+				<button type="submit">Submit</button>
+			</form>
+		</div>
+		<script>
+			
+			function SetGame(gameFile){
+				document.getElementById("game").src = gameFile;
+			}
+		</script>
+		<div>
+			<embed id="game" src="game.swf" type="application/x-shockwave-flash"></embed>
+		</div>
+	</body>
+</html>
