@@ -71,7 +71,7 @@ class Camera{
 }
 
 class Resource{
-    constructor(name = new String(),rect = new Rect()){
+    constructor(name = '' ,rect = new Rect()){
         this.name = name;
         this.rect = rect;
         this.amount = 1000;
@@ -90,9 +90,10 @@ class Player{
         this.maxSpd = maxSpd;
         
         this.camera = new Camera();
+        this.mouse = new Mouse();
 
         this.spd = new Vector2(0,0);
-        this.keys = new Array();
+        this.keys = new Array(0);
     }
     CheckKeys(){
         if(this.keys["w"]){

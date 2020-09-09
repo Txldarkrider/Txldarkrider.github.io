@@ -14,7 +14,6 @@ canvas.width = 720;
 canvas.height = 720;
 
 let p;
-let m;
 
 let resources = [];
 
@@ -111,7 +110,6 @@ function GenerateChuncks(resourcesArr){
 
 function start(){
     p = new Player(new Rect(new Vector2(),new Vector2(32,32),new Color("Coral")));
-    m = new Mouse();
     gridPosTaken = [
     ];
     gridPos = new Vector2(0,0);
@@ -126,22 +124,43 @@ function update(){
     requestAnimationFrame(update);
     ctx.clearRect(0,0,canvas.width,canvas.height);
     GenerateChuncks(resources);
-    m.Update(ctx);
+    ctx.save();
+        ctx.fillStyle= "black";
+        ctx.fillText(`MouseX: ${p.mouse.rect.pos.x}`,16,32);
+        ctx.fillText(`MouseY: ${p.mouse.rect.pos.y}`,16,48);
+        ctx.fillText(`MouseX+CameraX: ${p.mouse.rect.pos.x+p.camera.pos.x}`,16,64);
+        ctx.fillText(`MouseY+CameraY: ${p.mouse.rect.pos.y+p.camera.pos.y}`,16,80);
+        ctx.fillText(`MouseY+CameraX-CanvasW: ${p.mouse.rect.pos.y+p.camera.pos.y-canvas.width/2}`,16,80+16);
+        ctx.fillText(`MouseY+CameraY-CanvasH: ${p.mouse.rect.pos.y+p.camera.pos.y-canvas.height/2}`,16,80+32);
+        ctx.fillText(`CameraX: ${p.camera.pos.x}`,16,96+32);
+        ctx.fillText(`CameraY: ${p.camera.pos.y}`,16,112+32);
+        
+    ctx.restore();
     ctx.save();
         ctx.translate(-p.camera.pos.x + canvas.width/2,-p.camera.pos.y + canvas.height/2);
         gridPos = new Vector2(Math.trunc(p.rect.pos.x/gridSize),Math.trunc(p.rect.pos.y/gridSize));
         for(let key in resources){
 			resources[key].forEach(resource =>{
-				if(TestCollision(resource.rect,{pos:{x:p.camera.pos.x-p.camera.size.x/2,y:p.camera.pos.y-p.camera.size.y/2},size:new Vector2(p.camera.size.x,p.camera.size.y)})){
-					resource.Update(ctx);
-				}
-				if(resource.canDie){
-					delete resource;
-				}
+                if(TestCollision(resource.rect,{pos:{x:p.camera.pos.x-p.camera.size.x/2,y:p.camera.pos.y-p.camera.size.y/2},size:new Vector2(p.camera.size.x,p.camera.size.y)})){
+					resource.Update(ctx); 
+				} 
+                if(TestCollision(resource.rect,new Rect(new Vector2(p.mouse.rect.pos.x+p.camera.pos.x-canvas.width/2,p.mouse.rect.pos.y+p.camera.pos.y-canvas.height/2),new Vector2(p.mouse.rect.size.x,p.mouse.rect.size.y)))){
+                  if(p.mouse.keys[1]){
+                    resource.canDie = true;
+                  }  
+                }
 			});
-		}
+        }
+        for(let key in resources){
+            for(let key1 in resources[key]){
+                if(resources[key][key1].canDie){
+                    delete resources[key][key1];
+                }
+            }
+        }
         p.Update(ctx);
     ctx.restore();
+    p.mouse.Update(ctx);
 }
 document.onkeydown = (e) =>{
     p.keys[e.key] = true;
@@ -150,16 +169,16 @@ document.onkeyup = (e) =>{
     p.keys[e.key] = false;
 };
 document.onmousedown = (e) =>{
-    m.keys[e.which] = true;
+    p.mouse.keys[e.which] = true;
 };
 document.onmouseup = (e) =>{
-    m.keys[e.which] = false;
+    p.mouse.keys[e.which] = false;
 };
 document.oncontextmenu = (e) =>{
     e.preventDefault();
 }
 document.onmousemove = e =>{
-    m.rect.pos.Set(e.clientX - m.rect.size.x/2 - canvas.getBoundingClientRect().left,e.clientY- m.rect.size.y/2 - canvas.getBoundingClientRect().top);
+    p.mouse.rect.pos.Set(e.clientX - p.mouse.rect.size.x/2 - canvas.getBoundingClientRect().left,e.clientY- p.mouse.rect.size.y/2 - canvas.getBoundingClientRect().top);
 }
 
 start();
